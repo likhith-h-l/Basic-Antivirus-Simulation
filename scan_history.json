@@ -1,0 +1,121 @@
+[
+    {
+        "timestamp": "2026-06-18 14:45:00",
+        "total_files": 1,
+        "safe_files": 1,
+        "malicious_files": 0,
+        "files_quarantined": 0
+    },
+    {
+        "timestamp": "2026-06-18 14:46:03",
+        "total_files": 1,
+        "safe_files": 1,
+        "malicious_files": 0,
+        "files_quarantined": 0
+    },
+    {
+        "timestamp": "2026-06-18 14:49:08",
+        "total_files": 1,
+        "safe_files": 1,
+        "malicious_files": 0,
+        "files_quarantined": 0
+    },
+    {
+        "timestamp": "2026-06-18 14:49:39",
+        "total_files": 1,
+        "safe_files": 1,
+        "malicious_files": 0,
+        "files_quarantined": 0
+    },
+    {
+        "timestamp": "2026-06-18 14:58:28",
+        "total_files": 1,
+        "safe_files": 1,
+        "malicious_files": 0,
+        "files_quarantined": 0
+    },
+    {
+        "timestamp": "2026-06-18 15:03:38",
+        "total_files": 1,
+        "safe_files": 1,
+        "malicious_files": 0,
+        "files_quarantined": 0
+    },
+    {
+        "timestamp": "2026-06-18 15:03:53",
+        "total_files": 1,
+        "safe_files": 1,
+        "malicious_files": 0,
+        "files_quarantined": 0
+    },
+    {
+        "timestamp": "2026-06-18 15:04:17",
+        "total_files": 1,
+        "safe_files": 1,
+        "malicious_files": 0,
+        "files_quarantined": 0
+    },
+    {
+        "timestamp": "2026-06-18 15:04:38",
+        "total_files": 1,
+        "safe_files": 1,
+        "malicious_files": 0,
+        "files_quarantined": 0
+    },
+    {
+        "timestamp": "2026-06-18 15:16:18",
+        "total_files": 2,
+        "safe_files": 2,
+        "malicious_files": 0,
+        "files_quarantined": 0
+    },
+    {
+        "timestamp": "2026-06-18 15:17:54",
+        "total_files": 2,
+        "safe_files": 2,
+        "malicious_files": 0,
+        "files_quarantined": 0
+    },
+    {
+        "timestamp": "2026-06-18 15:20:47",
+        "total_files": 2,
+        "safe_files": 2,
+        "malicious_files": 0,
+        "files_quarantined": 0
+    },
+    {
+        "timestamp": "2026-06-18 15:24:06",
+        "total_files": 2,
+        "safe_files": 1,
+        "malicious_files": 1,
+        "files_quarantined": 1
+    },
+    {
+        "timestamp": "2026-06-18 15:33:50",
+        "total_files": 2,
+        "safe_files": 1,
+        "malicious_files": 1,
+        "files_quarantined": 1
+    },
+    {
+        "timestamp": "2026-06-18 15:45:41",
+        "total_files": 1,
+        "safe_files": 1,
+        "malicious_files": 0,
+        "files_quarantined": 0
+    },
+    {
+        "timestamp": "2026-06-18 15:46:07",
+        "total_files": 1,
+        "safe_files": 1,
+        "malicious_files": 0,
+        "files_quarantined": 0
+    },
+    {
+        "timestamp": "2026-06-18 15:46:32",
+        "total_files": 1,
+        "safe_files": 1,
+        "malicious_files": 0,
+        "files_quarantined": 0
+    }
+]
