@@ -1,4 +1,4 @@
-# Basic Antivirus Simulation V2
+# Basic Antivirus Simulation 
 
 A modern, professional desktop application simulating signature-based antivirus scanning and file integrity monitoring (FIM). Inspired by industry standards like Microsoft Defender and CrowdStrike Falcon, this simulation offers a full-featured graphical user dashboard alongside background automation to secure a mock test environment.
 
