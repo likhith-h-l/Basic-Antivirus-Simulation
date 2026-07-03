@@ -713,7 +713,7 @@ class AntivirusGUI(customtkinter.CTk):
                 path = os.path.join(quarantine_dir, filename)
                 size = os.path.getsize(path)
                 self.write_output(f"⚠️ Filename: {filename} ({size} bytes)\n")
-            self.write_output("=================================\n\n")
+            self.write_output("==================================\n\n")
             messagebox.showinfo("Quarantine Vault", f"Found {len(files)} quarantined threats.")
         except Exception as e:
             self.write_output(f"[ERROR] Failed to query quarantine folder: {e}\n\n")
