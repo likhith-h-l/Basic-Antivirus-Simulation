@@ -148,7 +148,7 @@ class AntivirusGUI(customtkinter.CTk):
             ("🔄 Integrity Scan", self.run_integrity_scan),
             ("📁 Reports", self.go_to_reports),
             ("📜 Scan History", self.go_to_history),
-            ("☣️ Quarantine",self.show_quarantine),
+            ("☣️ Quarantine", self.show_quarantine),
         ]
         
         row_idx = 2
