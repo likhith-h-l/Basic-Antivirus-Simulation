@@ -117,9 +117,9 @@ class AntivirusGUI(customtkinter.CTk):
         self.grid_columnconfigure(1, weight=1) # Main Frame: Responsive
         self.grid_rowconfigure(0, weight=1)
         
-        # =====================================================================
+        # ======================================================================
         # 1. SIDEBAR FRAME
-        # =====================================================================
+        # ======================================================================
         sidebar_frame = customtkinter.CTkFrame(self, fg_color=self.sidebar_bg, corner_radius=0, width=280)
         sidebar_frame.grid(row=0, column=0, sticky="nsew")
         sidebar_frame.grid_rowconfigure(9, weight=1) # Push exit button down
