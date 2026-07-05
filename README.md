@@ -112,7 +112,7 @@ The objective of this simulation is to demonstrate security protection mechanism
 
 ### 🔄 Running Integrity Scans
 1. In the sidebar, click **Integrity Scan**.
-2. It compares the live filesystem against the trusted baseline snapshot and reports any Modified, Deleted, or New files.
+2. It compares the live filesystem against the trusted baseline snapshot and reports any  Modified, Deleted, or New files.
 3. Check the **Reports** or **Dashboard** tabs to view the summarized delta alert metrics.
 
 ### 📁 Viewing Reports
@@ -180,5 +180,5 @@ By building and working with this simulation, several core cybersecurity concept
 ## Author
 
 - **Name:** Likhith H L
-- **Program:** B.E. CSE (IoT, Cybersecurity including Blockchain Technology)
+- **Program:** B.E. in CSE (IoT, Cybersecurity including Blockchain Technology)
 - **College:** Alva's Institute of Engineering and Technology
