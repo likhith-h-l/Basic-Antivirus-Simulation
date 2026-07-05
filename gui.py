@@ -171,7 +171,7 @@ class AntivirusGUI(customtkinter.CTk):
         # Exit Button in Sidebar
         exit_btn = customtkinter.CTkButton(
             sidebar_frame,
-            text="❌ Exit Hub",
+            text="❌  Exit Hub",
             command=self.exit_app,
             fg_color="#EF4444",
             hover_color="#DC2626",
@@ -183,9 +183,9 @@ class AntivirusGUI(customtkinter.CTk):
         )
         exit_btn.grid(row=10, column=0, padx=20, pady=30, sticky="ew")
         
-        # =====================================================================
+        # ======================================================================
         # 2. MAIN LAYOUT CONTAINER
-        # =====================================================================
+        # ======================================================================
         main_frame = customtkinter.CTkFrame(self, fg_color="transparent")
         main_frame.grid(row=0, column=1, sticky="nsew", padx=20, pady=20)
         main_frame.grid_columnconfigure(0, weight=1)
