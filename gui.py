@@ -74,9 +74,7 @@ def load_stats():
             
     return {
         "total_scans": total_scans,
-        "threats_detected": threats_detected,
-        "files_quarantined": files_quarantined,
-        "integrity_alerts": integrity_alerts
+        
     }
 
 
