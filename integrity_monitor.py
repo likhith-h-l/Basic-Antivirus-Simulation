@@ -5,7 +5,7 @@ from datetime import datetime
 from scanner import calculate_sha256
 
 # Define necessary paths
-
+BASELINE_FILE = r"D:\Basic_Antivirus_Simulation_V2\baseline.json
 REPORTS_DIR = r"D:\Basic_Antivirus_Simulation_V2\reports"
 TEST_FOLDER = r"D:\Basic_Antivirus_Simulation_V2\test_files"
 
