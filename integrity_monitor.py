@@ -178,7 +178,7 @@ def generate_integrity_report(modified, deleted, new_f, safe):
                     f.write(f"  - {item}\n")
                 f.write("\n")
                 
-            f.write("=================================\n")
+            f.write("==================================\n")
             
         print(f"[INFO] Integrity report generated successfully: {report_filename}")
     except Exception as e:
