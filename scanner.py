@@ -257,7 +257,7 @@ if __name__ == "__main__":
 
     print("=================================")
     print("LOADING MALWARE SIGNATURES")
-    print("==========================")
+    print("=================================")
     print()
     
     loaded_signatures = load_signatures()
