@@ -63,36 +63,35 @@ The application features a modern **CustomTkinter GUI** and provides hands-on ex
 
 # 📸 Screenshots
 
-> Add your screenshots inside the **assets/** folder.
 
 ### Dashboard
 
-![Dashboard](assets/dashboard.png)
+![Dashboard](dashboard.png)
 
 ### Malware Detection
 
-![Malware Detection](assets/malware_detection.png)
+![Malware Detection](malware_detection.png)
 
 ### File Integrity Monitoring
 
-![Integrity Scan](assets/integrity_scan.png)
+![Integrity Scan](integrity_scan.png)
 
 
 ### Baseline Creation
 
-![Baseline Creation](assets/baseline_creation.png)
+![Baseline Creation](baseline_creation.png)
 
 ### Reports
 
-![Reports](assets/reports.png)
+![Reports](reports.png)
 
 ### Quarantine Report
 
-![Quarantine Report](assets/quarantine_report.png)
+![Quarantine Report](quarantine_report.png)
 
 ### Scan History
 
-![Scan History](assets/history.png)
+![Scan History](history.png)
 
 ---
 
@@ -329,7 +328,7 @@ This project is licensed under the **MIT License**.
 
 **Likhith H L**
 
-Cybersecurity Student | SOC Analyst Aspirant | Python Developer
+Cybersecurity Student | AI-Integrated SOC Analyst | Cloud Security Enthusiast
 
 GitHub: https://github.com/likhith-h-l
 
