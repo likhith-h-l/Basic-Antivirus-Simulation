@@ -23,3 +23,11 @@ reports/*
 !reports/.gitkeep
 quarantine/*
 !quarantine/.gitkeep
+
+# Ignore user-generated logs and baselines
+scan_history.json
+baseline.json
+
+# Cache
+__pycache__/
+*.pyc

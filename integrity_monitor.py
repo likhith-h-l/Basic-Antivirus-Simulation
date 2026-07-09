@@ -2,17 +2,25 @@ import os
 import json
 import sys
 from datetime import datetime
+from typing import Dict, Any, List
+
+# Local imports
 from scanner import calculate_sha256
 
-# Define necessary paths
-BASELINE_FILE = r"D:\Basic_Antivirus_Simulation_V2\baseline.json"
-REPORTS_DIR = r"D:\Basic_Antivirus_Simulation_V2\reports"
-TEST_FOLDER = r"D:\Basic_Antivirus_Simulation_V2\test_files"
+# Define relative paths dynamically
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASELINE_FILE = os.path.join(BASE_DIR, "baseline.json")
+REPORTS_DIR = os.path.join(BASE_DIR, "reports")
+TEST_FOLDER = os.path.join(BASE_DIR, "test_files")
 
-def create_baseline(folder_path=TEST_FOLDER):
+
+def create_baseline(folder_path: str = TEST_FOLDER) -> None:
     """
     Creates a new baseline of file hashes for the specified folder.
     Saves the baseline data to baseline.json.
+    
+    Args:
+        folder_path (str): The directory to baseline.
     """
     baseline_data = {}
     
@@ -21,6 +29,10 @@ def create_baseline(folder_path=TEST_FOLDER):
     print("===========================")
     
     try:
+        if not os.path.exists(folder_path):
+            print(f"[ERROR] Target folder not found: {folder_path}")
+            return
+
         # Loop through all files in the test folder
         for filename in os.listdir(folder_path):
             file_path = os.path.join(folder_path, filename)
@@ -36,7 +48,7 @@ def create_baseline(folder_path=TEST_FOLDER):
                 }
                 
         # Save to baseline.json
-        with open(BASELINE_FILE, "w") as f:
+        with open(BASELINE_FILE, "w", encoding='utf-8') as f:
             json.dump(baseline_data, f, indent=4)
             
         print(f"[INFO] Baseline created successfully. Tracked {len(baseline_data)} files.")
@@ -45,26 +57,33 @@ def create_baseline(folder_path=TEST_FOLDER):
         
     print("=================================\n")
 
-def load_baseline():
+
+def load_baseline() -> Dict[str, Any]:
     """
     Loads the existing baseline from baseline.json.
-    Returns the baseline dictionary, or an empty dictionary if not found.
+    
+    Returns:
+        Dict[str, Any]: The baseline dictionary, or an empty dictionary if not found.
     """
     if not os.path.exists(BASELINE_FILE):
         print(f"[WARNING] Baseline file not found at {BASELINE_FILE}.")
         return {}
         
     try:
-        with open(BASELINE_FILE, "r") as f:
+        with open(BASELINE_FILE, "r", encoding='utf-8') as f:
             return json.load(f)
     except Exception as e:
         print(f"[ERROR] Failed to load baseline: {e}")
         return {}
 
-def scan_integrity(folder_path=TEST_FOLDER):
+
+def scan_integrity(folder_path: str = TEST_FOLDER) -> None:
     """
     Scans the folder and compares it against the loaded baseline.
     Detects modified, deleted, and newly created files.
+    
+    Args:
+        folder_path (str): The directory to scan.
     """
     baseline = load_baseline()
     if not baseline:
@@ -80,6 +99,10 @@ def scan_integrity(folder_path=TEST_FOLDER):
     
     # 1. Check for New and Modified files
     try:
+        if not os.path.exists(folder_path):
+            print(f"[ERROR] Target folder not found: {folder_path}")
+            return
+
         for filename in os.listdir(folder_path):
             file_path = os.path.join(folder_path, filename)
             
@@ -131,9 +154,16 @@ def scan_integrity(folder_path=TEST_FOLDER):
     # Generate the professional FIM report
     generate_integrity_report(modified_files, deleted_files, new_files, safe_files)
 
-def generate_integrity_report(modified, deleted, new_f, safe):
+
+def generate_integrity_report(modified: List[str], deleted: List[str], new_f: List[str], safe: List[str]) -> None:
     """
     Generates a professional integrity report and saves it to the reports folder.
+    
+    Args:
+        modified (List[str]): List of modified filenames.
+        deleted (List[str]): List of deleted filenames.
+        new_f (List[str]): List of newly created filenames.
+        safe (List[str]): List of unchanged filenames.
     """
     try:
         if not os.path.exists(REPORTS_DIR):
@@ -146,7 +176,7 @@ def generate_integrity_report(modified, deleted, new_f, safe):
         report_filename = f"integrity_report_{file_timestamp}.txt"
         report_path = os.path.join(REPORTS_DIR, report_filename)
         
-        with open(report_path, "w") as f:
+        with open(report_path, "w", encoding='utf-8') as f:
             f.write("=================================\n")
             f.write("FILE INTEGRITY MONITORING REPORT\n")
             f.write("=================================\n\n")
@@ -178,11 +208,12 @@ def generate_integrity_report(modified, deleted, new_f, safe):
                     f.write(f"  - {item}\n")
                 f.write("\n")
                 
-            f.write("==================================\n")
+            f.write("=================================\n")
             
         print(f"[INFO] Integrity report generated successfully: {report_filename}")
     except Exception as e:
         print(f"[ERROR] Failed to generate integrity report: {e}")
+
 
 if __name__ == "__main__":
     # Check command-line arguments to determine what action to take

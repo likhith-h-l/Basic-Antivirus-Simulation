@@ -28,9 +28,9 @@ def load_stats():
     """
     Dynamically loads metrics from the simulation files (scan_history.json, reports/, quarantine/).
     """
-    history_file = r"D:\Basic_Antivirus_Simulation_V2\scan_history.json"
-    quarantine_dir = r"D:\Basic_Antivirus_Simulation_V2\quarantine"
-    reports_dir = r"D:\Basic_Antivirus_Simulation_V2\reports"
+    history_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "scan_history.json")
+    quarantine_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "quarantine")
+    reports_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "reports")
     
     total_scans = 0
     threats_detected = 0
@@ -99,7 +99,7 @@ class AntivirusGUI(customtkinter.CTk):
         
         # Load Signature count for system information
         try:
-            sys.path.append(r"D:\Basic_Antivirus_Simulation_V2")
+            sys.path.append(os.path.dirname(os.path.abspath(__file__)))
             from scanner import load_signatures
             self.sig_count = len(load_signatures())
         except Exception:
@@ -117,9 +117,9 @@ class AntivirusGUI(customtkinter.CTk):
         self.grid_columnconfigure(1, weight=1) # Main Frame: Responsive
         self.grid_rowconfigure(0, weight=1)
         
-        # ======================================================================
+        # =====================================================================
         # 1. SIDEBAR FRAME
-        # ======================================================================
+        # =====================================================================
         sidebar_frame = customtkinter.CTkFrame(self, fg_color=self.sidebar_bg, corner_radius=0, width=280)
         sidebar_frame.grid(row=0, column=0, sticky="nsew")
         sidebar_frame.grid_rowconfigure(9, weight=1) # Push exit button down
@@ -171,7 +171,7 @@ class AntivirusGUI(customtkinter.CTk):
         # Exit Button in Sidebar
         exit_btn = customtkinter.CTkButton(
             sidebar_frame,
-            text="❌  Exit Hub",
+            text="❌ Exit Hub",
             command=self.exit_app,
             fg_color="#EF4444",
             hover_color="#DC2626",
@@ -183,9 +183,9 @@ class AntivirusGUI(customtkinter.CTk):
         )
         exit_btn.grid(row=10, column=0, padx=20, pady=30, sticky="ew")
         
-        # ======================================================================
+        # =====================================================================
         # 2. MAIN LAYOUT CONTAINER
-        # ======================================================================
+        # =====================================================================
         main_frame = customtkinter.CTkFrame(self, fg_color="transparent")
         main_frame.grid(row=0, column=1, sticky="nsew", padx=20, pady=20)
         main_frame.grid_columnconfigure(0, weight=1)
@@ -289,7 +289,7 @@ class AntivirusGUI(customtkinter.CTk):
         info_frame.grid_columnconfigure((0, 1), weight=1)
         
         left_info = (
-            "Simulation Path:\n  D:\\Basic_Antivirus_Simulation_V2\n\n"
+            f"Simulation Path:\n  {os.path.dirname(os.path.abspath(__file__))}\n\n"
             "Active Directories:\n"
             "  📂 test_files/     (Scanning Directory Target)\n"
             "  📂 quarantine/     (Malicious File Isolation Vault)\n"
@@ -495,7 +495,7 @@ class AntivirusGUI(customtkinter.CTk):
         for widget in self.reports_scroll.winfo_children():
             widget.destroy()
             
-        reports_dir = r"D:\Basic_Antivirus_Simulation_V2\reports"
+        reports_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "reports")
         if not os.path.exists(reports_dir):
             return
             
@@ -520,7 +520,7 @@ class AntivirusGUI(customtkinter.CTk):
             
     def view_report_detail(self, filename):
         """Reads selected report content and displays in the panel viewer."""
-        reports_dir = r"D:\Basic_Antivirus_Simulation_V2\reports"
+        reports_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "reports")
         path = os.path.join(reports_dir, filename)
         
         self.report_view_title.configure(text=f"📄 Log view: {filename}")
@@ -540,7 +540,7 @@ class AntivirusGUI(customtkinter.CTk):
         for widget in self.history_scroll.winfo_children():
             widget.destroy()
             
-        history_file = r"D:\Basic_Antivirus_Simulation_V2\scan_history.json"
+        history_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "scan_history.json")
         if not os.path.exists(history_file):
             lbl = customtkinter.CTkLabel(self.history_scroll, text="No historical logs recorded.", font=("Segoe UI", 13), text_color="#94A3B8")
             lbl.pack(pady=20)
@@ -693,7 +693,7 @@ class AntivirusGUI(customtkinter.CTk):
         self.clear_output()
         self.write_output(">>> Querying Quarantine Vault...\n")
         
-        quarantine_dir = r"D:\Basic_Antivirus_Simulation_V2\quarantine"
+        quarantine_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "quarantine")
         if not os.path.exists(quarantine_dir):
             self.write_output("[INFO] Quarantine directory does not exist.\n\n")
             messagebox.showinfo("Quarantine Vault", "No quarantined threats found.")
@@ -713,7 +713,7 @@ class AntivirusGUI(customtkinter.CTk):
                 path = os.path.join(quarantine_dir, filename)
                 size = os.path.getsize(path)
                 self.write_output(f"⚠️ Filename: {filename} ({size} bytes)\n")
-            self.write_output("==================================\n\n")
+            self.write_output("=================================\n\n")
             messagebox.showinfo("Quarantine Vault", f"Found {len(files)} quarantined threats.")
         except Exception as e:
             self.write_output(f"[ERROR] Failed to query quarantine folder: {e}\n\n")

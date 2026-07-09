@@ -3,26 +3,35 @@ import os
 import shutil
 import json
 from datetime import datetime
+from typing import List, Tuple
 
-def calculate_sha256(file_path):
+# Base directory for relative path resolution
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+SIGNATURES_FILE = os.path.join(BASE_DIR, "malware_signatures.txt")
+QUARANTINE_DIR = os.path.join(BASE_DIR, "quarantine")
+HISTORY_FILE = os.path.join(BASE_DIR, "scan_history.json")
+REPORTS_DIR = os.path.join(BASE_DIR, "reports")
+TEST_FOLDER = os.path.join(BASE_DIR, "test_files")
+
+
+def calculate_sha256(file_path: str) -> str:
     """
     Calculates the SHA-256 hash of a given file.
     Reads the file in chunks to handle large files efficiently.
-    """
-    # Create a SHA-256 hash object
-    sha256_hash = hashlib.sha256()
     
-    # Define the chunk size (64 KB)
-    chunk_size = 65536 
+    Args:
+        file_path (str): The absolute or relative path to the file.
+        
+    Returns:
+        str: The SHA-256 hash string, or an error message if failed.
+    """
+    sha256_hash = hashlib.sha256()
+    chunk_size = 65536  # 64 KB
     
     try:
-        # Open the file in binary mode for safe reading
         with open(file_path, "rb") as f:
-            # Read the file chunk by chunk until it's empty
             for byte_block in iter(lambda: f.read(chunk_size), b""):
                 sha256_hash.update(byte_block)
-                
-        # Return the calculated hash as a hexadecimal string
         return sha256_hash.hexdigest()
         
     except FileNotFoundError:
@@ -30,74 +39,89 @@ def calculate_sha256(file_path):
     except PermissionError:
         return "Error: Permission denied to read the file."
     except Exception as e:
-        # Catch any other unexpected exceptions
         return f"Error: An unexpected error occurred: {e}"
 
-def load_signatures():
+
+def load_signatures() -> List[str]:
     """
     Loads malware signatures from a text file.
     Ignores empty lines, comments, and invalid hashes.
+    
+    Returns:
+        List[str]: A list of valid SHA-256 malware signatures.
     """
     signatures = []
-    signatures_file = r"D:\Basic_Antivirus_Simulation_V2\malware_signatures.txt"
     
     try:
-        with open(signatures_file, "r") as f:
+        with open(SIGNATURES_FILE, "r") as f:
             for line in f:
                 clean_line = line.strip()
-                
-                # Ignore empty lines and comments
                 if clean_line and not clean_line.startswith('#'):
-                    # Check if it looks like a valid SHA-256 hash
                     if len(clean_line) == 64 and all(c in '0123456789abcdefABCDEF' for c in clean_line):
                         signatures.append(clean_line.lower())
-                    
         return signatures
         
     except FileNotFoundError:
+        print(f"[WARNING] Signature file not found at {SIGNATURES_FILE}")
         return []
     except Exception as e:
-        print(f"Error loading signatures: {e}")
+        print(f"[ERROR] Failed loading signatures: {e}")
         return []
 
-def is_malicious(file_hash, signatures):
+
+def is_malicious(file_hash: str, signatures: List[str]) -> bool:
     """
     Checks if the calculated file hash matches any known malware signature.
-    Returns True if a match is found, False otherwise.
+    
+    Args:
+        file_hash (str): The SHA-256 hash of the target file.
+        signatures (List[str]): The list of known malware hashes.
+        
+    Returns:
+        bool: True if a match is found, False otherwise.
     """
-    if file_hash in signatures:
-        return True
-    return False
+    return file_hash in signatures
 
-def quarantine_file(file_path):
+
+def quarantine_file(file_path: str) -> bool:
     """
     Moves a malicious file to the quarantine directory safely.
-    Preserves the original filename.
+    Appends '.quarantined' to prevent accidental execution.
+    
+    Args:
+        file_path (str): The path of the file to quarantine.
+        
+    Returns:
+        bool: True if successful, False otherwise.
     """
-    quarantine_dir = r"D:\Basic_Antivirus_Simulation_V2\quarantine"
     filename = os.path.basename(file_path)
-    destination = os.path.join(quarantine_dir, filename)
+    # Add .quarantined suffix to neutralize the file
+    destination = os.path.join(QUARANTINE_DIR, f"{filename}.quarantined")
     
     try:
-        if not os.path.exists(quarantine_dir):
-            os.makedirs(quarantine_dir)
+        if not os.path.exists(QUARANTINE_DIR):
+            os.makedirs(QUARANTINE_DIR)
             
         shutil.move(file_path, destination)
-        print(f"Moved {filename} to quarantine")
+        print(f"Moved {filename} to quarantine (neutralized as .quarantined)")
         return True
         
     except Exception as e:
-        print(f"Error quarantining {filename}: {e}")
+        print(f"[ERROR] Error quarantining {filename}: {e}")
         return False
 
-def save_scan_history(total, safe, malicious, quarantined):
+
+def save_scan_history(total: int, safe: int, malicious: int, quarantined: int) -> None:
     """
     Saves the scan results to scan_history.json.
     Appends new records to the existing history.
-    """
-    history_file = r"D:\Basic_Antivirus_Simulation_V2\scan_history.json"
     
-    # Create the new record
+    Args:
+        total (int): Total files scanned.
+        safe (int): Number of safe files.
+        malicious (int): Number of malicious files found.
+        quarantined (int): Number of files successfully quarantined.
+    """
     new_record = {
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "total_files": total,
@@ -106,37 +130,38 @@ def save_scan_history(total, safe, malicious, quarantined):
         "files_quarantined": quarantined
     }
     
-    # Load existing history if the file exists
     history_data = []
-    if os.path.exists(history_file):
+    if os.path.exists(HISTORY_FILE):
         try:
-            with open(history_file, "r") as f:
+            with open(HISTORY_FILE, "r") as f:
                 history_data = json.load(f)
         except Exception:
-            # If the file is corrupted or empty, start fresh
             history_data = []
             
-    # Append the new record
     history_data.append(new_record)
     
-    # Save back to the JSON file
     try:
-        with open(history_file, "w") as f:
+        with open(HISTORY_FILE, "w") as f:
             json.dump(history_data, f, indent=4)
         print("[INFO] Scan history saved successfully.")
     except Exception as e:
         print(f"[ERROR] Failed to save scan history: {e}")
 
-def generate_report(total, safe, malicious, quarantined, file_details):
+
+def generate_report(total: int, safe: int, malicious: int, quarantined: int, file_details: List[Tuple[str, str]]) -> None:
     """
     Generates a professional scan report and saves it to the reports folder.
-    """
-    reports_dir = r"D:\Basic_Antivirus_Simulation_V2\reports"
     
-    # Create reports directory if it doesn't exist
+    Args:
+        total (int): Total files scanned.
+        safe (int): Number of safe files.
+        malicious (int): Number of malicious files.
+        quarantined (int): Number of files quarantined.
+        file_details (List[Tuple[str, str]]): List of tuples containing (filename, status).
+    """
     try:
-        if not os.path.exists(reports_dir):
-            os.makedirs(reports_dir)
+        if not os.path.exists(REPORTS_DIR):
+            os.makedirs(REPORTS_DIR)
     except Exception as e:
         print(f"[ERROR] Failed to create reports directory: {e}")
         return
@@ -146,7 +171,7 @@ def generate_report(total, safe, malicious, quarantined, file_details):
     file_timestamp = timestamp_obj.strftime("%Y%m%d_%H%M%S")
     
     report_filename = f"scan_report_{file_timestamp}.txt"
-    report_path = os.path.join(reports_dir, report_filename)
+    report_path = os.path.join(REPORTS_DIR, report_filename)
     
     try:
         with open(report_path, "w") as f:
@@ -172,10 +197,15 @@ def generate_report(total, safe, malicious, quarantined, file_details):
     except Exception as e:
         print(f"[ERROR] Failed to generate report: {e}")
 
-def scan_folder(folder_path, signatures):
+
+def scan_folder(folder_path: str, signatures: List[str]) -> None:
     """
     Scans a folder, calculating the hash of each file and checking for threats.
     Outputs a report of safe and malicious files.
+    
+    Args:
+        folder_path (str): The directory to scan.
+        signatures (List[str]): List of known malware signatures.
     """
     total_scanned = 0
     safe_files = 0
@@ -191,6 +221,10 @@ def scan_folder(folder_path, signatures):
     file_details = []
 
     try:
+        if not os.path.exists(folder_path):
+            print(f"[ERROR] Target folder not found: {folder_path}")
+            return
+
         for filename in os.listdir(folder_path):
             file_path = os.path.join(folder_path, filename)
             
@@ -200,6 +234,13 @@ def scan_folder(folder_path, signatures):
                 
                 print(f"File: {filename}")
                 
+                # Check for errors in hashing (e.g. Permission errors)
+                if file_hash.startswith("Error:"):
+                    print(f"Status: ERROR ({file_hash})")
+                    file_details.append((filename, "ERROR"))
+                    print()
+                    continue
+
                 if is_malicious(file_hash, signatures):
                     print("Status: MALICIOUS")
                     malicious_files += 1
@@ -222,7 +263,7 @@ def scan_folder(folder_path, signatures):
             print()
             
     except Exception as e:
-        print(f"Error while scanning folder: {e}")
+        print(f"[ERROR] Error while scanning folder: {e}")
 
     print("=================================")
     print("SCAN SUMMARY")
@@ -241,20 +282,8 @@ def scan_folder(folder_path, signatures):
     # Generate report
     generate_report(total_scanned, safe_files, malicious_files, quarantined_files, file_details)
 
-if __name__ == "__main__":
-    suspicious_file = r"D:\Basic_Antivirus_Simulation_V2\test_files\suspicious_file.txt"
-    try:
-        suspicious_hash = calculate_sha256(suspicious_file)
-        if "Error" not in suspicious_hash:
-            print("=================================")
-            print(f"Hash of suspicious_file.txt:")
-            print(f"{suspicious_hash}")
-            print("Copy this hash into malware_signatures.txt to detect it as malicious.")
-            print("=================================")
-            print()
-    except Exception:
-        pass
 
+if __name__ == "__main__":
     print("=================================")
     print("LOADING MALWARE SIGNATURES")
     print("==========================")
@@ -268,6 +297,4 @@ if __name__ == "__main__":
         print(f"Total Signatures Loaded: {len(loaded_signatures)}")
         
     print()
-    
-    test_folder = r"D:\Basic_Antivirus_Simulation_V2\test_files"
-    scan_folder(test_folder, loaded_signatures)
+    scan_folder(TEST_FOLDER, loaded_signatures)
